@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   zookeeper:
     image: bitnami/zookeeper
@@ -23,13 +25,40 @@ services:
     depends_on:
       - zookeeper
 
+  mongodb:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - "mongodb_data:/data/db"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  mysql:
+    image: mysql:8.0
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - "mysql_data:/var/lib/mysql"
+    environment:
+      MYSQL_ROOT_PASSWORD: techBankRootPsw
+      MYSQL_DATABASE: exampledb
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+
 volumes:
   zookeeper_data:
     driver: local
   kafka_data:
     driver: local
+  mongodb_data:
+    driver: local
+  mysql_data:
+    driver: local
    
 networks:
   default:
-    external:
       name: techbankNet
