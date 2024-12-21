@@ -65,4 +65,11 @@ public class AccountAggregate extends AggregateRoot {
         raiseEvent(new AccountClosedEvent(this.id, getVersion()));
     }
 
+    public double getBalance() {
+        return balance;
+    }
+
+    public Boolean isActive() {
+        return active;
+    }
 }
