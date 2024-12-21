@@ -18,4 +18,20 @@ public class AccountOpenedEvent extends BaseEvent {
         this.createdDate = createdDate;
         this.openingBalance = openingBalance;
     }
+
+    public String getAccountHolder() {
+        return accountHolder;
+    }
+
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public double getOpeningBalance() {
+        return openingBalance;
+    }
 }

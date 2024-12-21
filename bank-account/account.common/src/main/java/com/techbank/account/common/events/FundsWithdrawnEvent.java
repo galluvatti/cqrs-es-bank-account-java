@@ -9,4 +9,8 @@ public class FundsWithdrawnEvent extends BaseEvent {
         super(id, version);
         this.amount = amount;
     }
+
+    public double getAmount() {
+        return amount;
+    }
 }

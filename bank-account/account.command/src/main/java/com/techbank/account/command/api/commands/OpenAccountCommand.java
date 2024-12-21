@@ -14,4 +14,16 @@ public class OpenAccountCommand extends BaseCommand {
         this.accountType = accountType;
         this.openingBalance = openingBalance;
     }
+
+    public String getAccountHolder() {
+        return accountHolder;
+    }
+
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public double getOpeningBalance() {
+        return openingBalance;
+    }
 }
