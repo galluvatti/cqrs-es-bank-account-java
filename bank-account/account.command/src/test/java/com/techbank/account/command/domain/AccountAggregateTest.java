@@ -1,6 +1,5 @@
 package com.techbank.account.command.domain;
 
-import com.techbank.account.command.api.commands.CloseAccountCommand;
 import com.techbank.account.command.api.commands.OpenAccountCommand;
 import com.techbank.account.common.dto.AccountType;
 import com.techbank.account.common.events.AccountClosedEvent;
@@ -53,6 +52,7 @@ class AccountAggregateTest {
         int initialBalance = 1000;
         AccountAggregate aggregate = anAccountWithBalance(initialBalance);
         double fundsToAdd = -500.24;
+
         assertThatThrownBy(
                 () -> aggregate.depositFunds(fundsToAdd))
                 .isInstanceOf(IllegalStateException.class)
@@ -62,6 +62,7 @@ class AccountAggregateTest {
     @Test
     void shouldNotDepositOnAClosedAccount() {
         AccountAggregate aggregate = aClosedAccount();
+
         assertThatThrownBy(
                 () -> aggregate.depositFunds(100))
                 .isInstanceOf(IllegalStateException.class)
@@ -82,8 +83,20 @@ class AccountAggregateTest {
     }
 
     @Test
+    void shouldNotWithdrawFundsIfAmountExceedsCurrentBalance() {
+        int initialBalance = 1000;
+        AccountAggregate aggregate = anAccountWithBalance(initialBalance);
+        double fundsToWithdraw = initialBalance + 1;
+
+        assertThatThrownBy(() -> aggregate.withdrawFunds(fundsToWithdraw))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Withdrawal declined. Insufficient balance!");
+    }
+
+    @Test
     void shouldNotWithdrawOnAClosedAccount() {
         AccountAggregate aggregate = aClosedAccount();
+
         assertThatThrownBy(
                 () -> aggregate.withdrawFunds(100))
                 .isInstanceOf(IllegalStateException.class)
@@ -104,6 +117,7 @@ class AccountAggregateTest {
     @Test
     void shouldNotCloseAnAlreadyClosedAccount() {
         AccountAggregate aggregate = aClosedAccount();
+
         assertThatThrownBy(
                 aggregate::close)
                 .isInstanceOf(IllegalStateException.class)

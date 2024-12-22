@@ -51,22 +51,23 @@ public class AccountAggregate extends AggregateRoot {
     }
 
     public void depositFunds(double amount) {
-        if(!this.active) throw new IllegalStateException("Current account is closed!");
-        if(amount <= 0) throw new IllegalStateException("The deposit amount must be greater than zero.");
+        if (!this.active) throw new IllegalStateException("Current account is closed!");
+        if (amount <= 0) throw new IllegalStateException("The deposit amount must be greater than zero.");
         raiseEvent(new FundsDepositedEvent(
                 this.id, getVersion(), amount
         ));
     }
 
     public void withdrawFunds(double amount) {
-        if(!this.active) throw new IllegalStateException("Current account is closed!");
+        if (!this.active) throw new IllegalStateException("Current account is closed!");
+        if (amount > getBalance()) throw new IllegalStateException("Withdrawal declined. Insufficient balance!");
         raiseEvent(new FundsWithdrawnEvent(
                 this.id, getVersion(), amount
         ));
     }
 
     public void close() {
-        if(!this.active) throw new IllegalStateException("Account is already closed!");
+        if (!this.active) throw new IllegalStateException("Account is already closed!");
         raiseEvent(new AccountClosedEvent(this.id, getVersion()));
     }
 
