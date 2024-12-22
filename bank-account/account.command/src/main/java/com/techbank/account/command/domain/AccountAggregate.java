@@ -13,6 +13,7 @@ public class AccountAggregate extends AggregateRoot {
     private Boolean active;
     private double balance;
 
+    //FIXME I don't like 2 constructors
     public AccountAggregate(OpenAccountCommand command) {
         raiseEvent(new AccountOpenedEvent(
                 command.getId(),
@@ -22,6 +23,10 @@ public class AccountAggregate extends AggregateRoot {
                 new Date(),
                 command.getOpeningBalance()
         ));
+    }
+
+    public AccountAggregate() {
+
     }
 
     public void apply(AccountOpenedEvent event) {

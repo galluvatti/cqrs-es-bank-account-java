@@ -9,4 +9,8 @@ public class DepositFundsCommand extends BaseCommand {
         super(id);
         this.amount = amount;
     }
+
+    public double getAmount() {
+        return amount;
+    }
 }
