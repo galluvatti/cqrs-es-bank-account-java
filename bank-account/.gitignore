@@ -36,3 +36,9 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Docker Compose ###
+mysql_data
+mongodb_data
+kafka_data
+zookeeper_data
