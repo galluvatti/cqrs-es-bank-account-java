@@ -5,6 +5,7 @@ import com.techbank.cqrs.core.events.BaseEvent;
 import com.techbank.cqrs.core.events.EventModel;
 import com.techbank.cqrs.core.exceptions.AggregateNotFoundException;
 import com.techbank.cqrs.core.exceptions.OptimisticConcurrencyException;
+import com.techbank.cqrs.core.producers.EventProducer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -26,6 +27,8 @@ class AccountEventStoreTest {
 
     @Mock
     private EventStoreRepository eventStoreRepository;
+    @Mock
+    private EventProducer eventProducer;
 
     @Test
     void shouldSaveEvents() {
@@ -38,13 +41,14 @@ class AccountEventStoreTest {
         List<EventModel> pastEvents = anEventStream(expectedVersion);
         when(eventStoreRepository.findByAggregateId(aggregateId)).thenReturn(pastEvents);
 
-        new AccountEventStore(eventStoreRepository).saveEvents(
+        new AccountEventStore(eventStoreRepository, eventProducer).saveEvents(
                 aggregateId,
                 eventsToSave,
                 expectedVersion
         );
 
         verify(eventStoreRepository, times(eventsToSave.size())).save(any());
+        eventsToSave.forEach(event -> verify(eventProducer).produce(event.getClass().getSimpleName(), event));
     }
 
     @Test
@@ -58,7 +62,7 @@ class AccountEventStoreTest {
         List<EventModel> pastEvents = anEventStream(expectedVersion + 1);
         when(eventStoreRepository.findByAggregateId(aggregateId)).thenReturn(pastEvents);
 
-        assertThatThrownBy(() -> new AccountEventStore(eventStoreRepository).saveEvents(
+        assertThatThrownBy(() -> new AccountEventStore(eventStoreRepository, eventProducer).saveEvents(
                 aggregateId,
                 eventsToSave,
                 expectedVersion
@@ -73,7 +77,7 @@ class AccountEventStoreTest {
         List<EventModel> pastEvents = anEventStream(2);
         when(eventStoreRepository.findByAggregateId(aggregateId)).thenReturn(pastEvents);
 
-        List<BaseEvent> events = new AccountEventStore(eventStoreRepository).getEvents(aggregateId);
+        List<BaseEvent> events = new AccountEventStore(eventStoreRepository, eventProducer).getEvents(aggregateId);
 
         assertThat(events.size()).isEqualTo(pastEvents.size());
     }
@@ -84,7 +88,7 @@ class AccountEventStoreTest {
         when(eventStoreRepository.findByAggregateId(aggregateId)).thenReturn(null);
 
         assertThatThrownBy(
-                () -> new AccountEventStore(eventStoreRepository).getEvents(aggregateId)
+                () -> new AccountEventStore(eventStoreRepository, eventProducer).getEvents(aggregateId)
         ).isInstanceOf(AggregateNotFoundException.class);
 
     }
