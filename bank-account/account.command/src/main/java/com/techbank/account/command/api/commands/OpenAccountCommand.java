@@ -26,4 +26,18 @@ public class OpenAccountCommand extends BaseCommand {
     public double getOpeningBalance() {
         return openingBalance;
     }
+
+    public void setAccountHolder(String accountHolder) {
+        this.accountHolder = accountHolder;
+    }
+
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
+    }
+
+    public void setOpeningBalance(double openingBalance) {
+        this.openingBalance = openingBalance;
+    }
+
+
 }

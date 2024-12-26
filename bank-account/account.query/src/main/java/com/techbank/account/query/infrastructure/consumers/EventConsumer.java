@@ -1,18 +1,18 @@
 package com.techbank.account.query.infrastructure.consumers;
 
-import com.techbank.account.common.events.AccountClosedEvent;
-import com.techbank.account.common.events.AccountOpenedEvent;
-import com.techbank.account.common.events.FundsDepositedEvent;
-import com.techbank.account.common.events.FundsWithdrawnEvent;
+import com.techbank.account.query.domain.events.AccountClosedEvent;
+import com.techbank.account.query.domain.events.AccountOpenedEvent;
+import com.techbank.account.query.domain.events.FundsDepositedEvent;
+import com.techbank.account.query.domain.events.FundsWithdrawnEvent;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.messaging.handler.annotation.Payload;
 
 public interface EventConsumer {
-    void consume(@Payload AccountOpenedEvent event, Acknowledgment ack);
+    void consumeAccountOpenedEvent(@Payload String event, Acknowledgment ack);
 
-    void consume(@Payload FundsDepositedEvent event, Acknowledgment ack);
+    void consumeFundsDepositedEvent(@Payload String event, Acknowledgment ack);
 
-    void consume(@Payload FundsWithdrawnEvent event, Acknowledgment ack);
+    void consumeFundsWithdrawnEvent(@Payload String event, Acknowledgment ack);
 
-    void consume(@Payload AccountClosedEvent event, Acknowledgment ack);
+    void consumeAccountClosedEvent(@Payload String event, Acknowledgment ack);
 }

@@ -5,7 +5,7 @@ import com.techbank.cqrs.core.messages.Message;
 import java.util.Objects;
 
 public abstract class BaseEvent extends Message {
-    private final int version;
+    private int version;
 
     public BaseEvent(String id, int version) {
         super(id);
@@ -14,6 +14,10 @@ public abstract class BaseEvent extends Message {
 
     public int getVersion() {
         return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     @Override

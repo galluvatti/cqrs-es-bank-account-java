@@ -5,6 +5,7 @@ import com.techbank.cqrs.core.events.BaseEvent;
 
 import java.util.Date;
 
+
 public class AccountOpenedEvent extends BaseEvent {
     private String accountHolder;
     private AccountType accountType;

@@ -3,7 +3,7 @@ package com.techbank.cqrs.core.messages;
 import java.util.Objects;
 
 public abstract class Message {
-    private final String id;
+    private String id;
 
     public Message(String id) {
         this.id = id;
@@ -11,6 +11,10 @@ public abstract class Message {
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override

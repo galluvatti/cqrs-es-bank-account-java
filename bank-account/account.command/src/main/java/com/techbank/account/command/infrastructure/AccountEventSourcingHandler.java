@@ -10,11 +10,15 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class AccountEventSourcingHandler implements EventSourcingHandler<AccountAggregate> {
 
-    private EventStore eventStore;
+    private static final Logger logger = Logger.getLogger(AccountEventSourcingHandler.class.getName());
+
+    private final EventStore eventStore;
 
     @Autowired
     public AccountEventSourcingHandler(EventStore eventStore) {
@@ -30,6 +34,7 @@ public class AccountEventSourcingHandler implements EventSourcingHandler<Account
 
     @Override
     public AccountAggregate getById(String aggregateId) {
+        logger.log(Level.INFO, "Retrieving from EventStore aggregate with id %s".formatted(aggregateId));
         AccountAggregate aggregate = new AccountAggregate();
         List<BaseEvent> events = eventStore.getEvents(aggregateId);
         if (!CollectionUtils.isEmpty(events)) {

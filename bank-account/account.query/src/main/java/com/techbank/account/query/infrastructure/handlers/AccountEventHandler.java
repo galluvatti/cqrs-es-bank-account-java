@@ -1,11 +1,11 @@
 package com.techbank.account.query.infrastructure.handlers;
 
-import com.techbank.account.common.events.AccountClosedEvent;
-import com.techbank.account.common.events.AccountOpenedEvent;
-import com.techbank.account.common.events.FundsDepositedEvent;
-import com.techbank.account.common.events.FundsWithdrawnEvent;
 import com.techbank.account.query.domain.BankAccount;
 import com.techbank.account.query.domain.BankAccountRepository;
+import com.techbank.account.query.domain.events.AccountClosedEvent;
+import com.techbank.account.query.domain.events.AccountOpenedEvent;
+import com.techbank.account.query.domain.events.FundsDepositedEvent;
+import com.techbank.account.query.domain.events.FundsWithdrawnEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -17,7 +17,7 @@ public class AccountAggregate extends AggregateRoot {
     public AccountAggregate(OpenAccountCommand command) {
         raiseEvent(new AccountOpenedEvent(
                 command.getId(),
-                1,
+                0,
                 command.getAccountHolder(),
                 command.getAccountType(),
                 new Date(),

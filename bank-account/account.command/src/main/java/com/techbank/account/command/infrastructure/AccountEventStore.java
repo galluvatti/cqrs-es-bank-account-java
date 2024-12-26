@@ -30,11 +30,13 @@ public class AccountEventStore implements EventStore {
     public void saveEvents(String aggregateId, Iterable<BaseEvent> events, int expectedVersion) {
         List<EventModel> eventStream = repository.findByAggregateId(aggregateId);
         if (expectedVersion != -1 && eventStream.get(eventStream.size() - 1).getVersion() != expectedVersion) {
-            throw new OptimisticConcurrencyException();
+            throw new OptimisticConcurrencyException("Version Mismatch, expected " + expectedVersion + " but found " +
+                    eventStream.get(eventStream.size() - 1).getVersion());
         }
         var version = expectedVersion;
         for (var event : events) {
             version++;
+            event.setVersion(version);
             repository.save(new EventModel(
                     new Date(),
                     aggregateId,

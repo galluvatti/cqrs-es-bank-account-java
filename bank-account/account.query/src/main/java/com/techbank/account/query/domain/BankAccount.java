@@ -1,6 +1,5 @@
 package com.techbank.account.query.domain;
 
-import com.techbank.account.common.dto.AccountType;
 import com.techbank.cqrs.core.domain.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

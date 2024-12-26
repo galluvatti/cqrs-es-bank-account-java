@@ -1,12 +1,12 @@
 package com.techbank.account.query.infrastructure.handlers;
 
-import com.techbank.account.common.dto.AccountType;
-import com.techbank.account.common.events.AccountClosedEvent;
-import com.techbank.account.common.events.AccountOpenedEvent;
-import com.techbank.account.common.events.FundsDepositedEvent;
-import com.techbank.account.common.events.FundsWithdrawnEvent;
+import com.techbank.account.query.domain.AccountType;
 import com.techbank.account.query.domain.BankAccount;
 import com.techbank.account.query.domain.BankAccountRepository;
+import com.techbank.account.query.domain.events.AccountClosedEvent;
+import com.techbank.account.query.domain.events.AccountOpenedEvent;
+import com.techbank.account.query.domain.events.FundsDepositedEvent;
+import com.techbank.account.query.domain.events.FundsWithdrawnEvent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
