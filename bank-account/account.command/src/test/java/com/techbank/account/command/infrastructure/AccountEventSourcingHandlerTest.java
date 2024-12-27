@@ -4,6 +4,7 @@ import com.techbank.account.command.domain.AccountAggregate;
 import com.techbank.account.common.dto.AccountType;
 import com.techbank.account.common.events.AccountOpenedEvent;
 import com.techbank.cqrs.core.infrastructure.EventStore;
+import com.techbank.cqrs.core.producers.EventProducer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -22,6 +23,8 @@ class AccountEventSourcingHandlerTest {
 
     @Mock
     private EventStore eventStore;
+    @Mock
+    private EventProducer eventProducer;
 
     @Test
     void shouldSave() {
@@ -30,7 +33,7 @@ class AccountEventSourcingHandlerTest {
         when(aggregate.getUncommitedChanges()).thenReturn(emptyList());
         when(aggregate.getVersion()).thenReturn(1);
 
-        new AccountEventSourcingHandler(eventStore).save(aggregate);
+        new AccountEventSourcingHandler(eventStore, eventProducer).save(aggregate);
 
         verify(aggregate).markChangesAsCommitted();
     }
@@ -49,7 +52,7 @@ class AccountEventSourcingHandlerTest {
                         accountBalance
                 ))
         );
-        AccountAggregate aggregate = new AccountEventSourcingHandler(eventStore).getById(aggregateId);
+        AccountAggregate aggregate = new AccountEventSourcingHandler(eventStore, eventProducer).getById(aggregateId);
 
         assertNotNull(aggregate);
         assertThat(aggregate.getBalance()).isEqualTo(accountBalance);

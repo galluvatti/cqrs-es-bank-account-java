@@ -4,6 +4,7 @@ import com.techbank.account.command.domain.AccountAggregate;
 import com.techbank.cqrs.core.events.BaseEvent;
 import com.techbank.cqrs.core.handlers.EventSourcingHandler;
 import com.techbank.cqrs.core.infrastructure.EventStore;
+import com.techbank.cqrs.core.producers.EventProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -19,10 +20,12 @@ public class AccountEventSourcingHandler implements EventSourcingHandler<Account
     private static final Logger logger = Logger.getLogger(AccountEventSourcingHandler.class.getName());
 
     private final EventStore eventStore;
+    private final EventProducer eventProducer;
 
     @Autowired
-    public AccountEventSourcingHandler(EventStore eventStore) {
+    public AccountEventSourcingHandler(EventStore eventStore, EventProducer eventProducer) {
         this.eventStore = eventStore;
+        this.eventProducer = eventProducer;
     }
 
 
@@ -43,5 +46,18 @@ public class AccountEventSourcingHandler implements EventSourcingHandler<Account
             aggregate.setVersion(events.stream().map(BaseEvent::getVersion).max(Comparator.naturalOrder()).get());
         }
         return aggregate;
+    }
+
+    @Override
+    public void republishEvents() {
+        var aggregateIds = eventStore.getAggregateIds();
+        aggregateIds.forEach(id -> {
+            AccountAggregate aggregate = getById(id);
+            if (aggregate != null && aggregate.isActive()) {
+                List<BaseEvent> events = eventStore.getEvents(id);
+                events.forEach(event ->
+                        eventProducer.produce(event.getClass().getSimpleName(), event));
+            }
+        });
     }
 }
